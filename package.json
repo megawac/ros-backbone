@@ -1,0 +1,28 @@
+{
+  "name": "ros-backbone",
+  "version": "1.0.0",
+  "description": "Backbone Model and Collection bindings to ROSLib.js Topics and Services",
+  "main": "index.js",
+  "scripts": {
+    "test": "prova test/*.js"
+  },
+  "keywords": [
+    "ROS",
+    "Backbone"
+  ],
+  "author": "megawac (https://github.com/megawac)",
+  "license": "wtfpl",
+  "devDependencies": {
+    "eventemitter2": "^0.4.14",
+    "jshint": "^2.5.10",
+    "prova": "^2.0.3"
+  },
+  "dependencies": {
+    "backbone": "^1.0.0",
+    "underscore": "^1.0.0"
+  },
+  "maintainers": [
+    "megawac <megawac@gmail.com>"
+  ],
+  "directories": {}
+}
