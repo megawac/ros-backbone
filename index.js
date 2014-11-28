@@ -42,7 +42,6 @@ function createBinder(method) {
             }
 
             if (transform) {
-                console.log("message", message);
                 message = transform.call(self, message);
             }
 
