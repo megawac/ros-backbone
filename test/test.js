@@ -3,13 +3,20 @@ var TopicMock = require("./TopicMock");
 
 var test = require("prova");
 
+var TestingModel = BBROS.Model.extend({
+    isNew: function() {
+        return false;
+    }
+});
+
 function createMock() {
     return new TopicMock({
         name: "/something"
     });
 }
+
 test("Throws given poor topic interface", function(t) {
-    var myModel = new BBROS.Model();
+    var myModel = new TestingModel();
     var myCollection = new BBROS.Collection();
     t.throws(function() {
         myModel.bind({}, {
@@ -25,8 +32,10 @@ test("Throws given poor topic interface", function(t) {
 });
 
 test("Model with no config", function(t) {
+    t.plan(2);
+
     var mockTopic = createMock();
-    var myModel = new BBROS.Model().bind(mockTopic);
+    var myModel = new TestingModel().bind(mockTopic);
 
     mockTopic.publish({
         a: 1, b: 2, c: 3
@@ -43,11 +52,11 @@ test("Model with no config", function(t) {
     t.deepEqual(myModel.toJSON(), {
         a: 1, b: 5, c: 6
     });
-
-    t.end();
 });
 
 test("Collection with no config", function(t) {
+    t.plan(1);
+
     var mockTopic = createMock();
     var myCollection = new BBROS.Collection().bind(mockTopic);
 
@@ -62,13 +71,38 @@ test("Collection with no config", function(t) {
         {a: 1, b: 2, c: 3},
         {a: 4, b: 5, c: 6}
     ]);
-
-    t.end();
 });
 
 test("Model with remaps and chosen keys", function(t) {
+    t.plan(1);
+
     var mockTopic = createMock();
-    var myModel = new BBROS.Model().bind(mockTopic, {
+    var myModel = new TestingModel().bind(mockTopic, {
+        bindings: {
+            "pose.position.y" : "lat",
+            "pose.position.x": "lng"
+        }
+    });
+
+    mockTopic.publish({
+        pose: {
+            position: {
+                x: 5,
+                y: 1
+            }
+        }
+    });
+
+    t.deepEqual(myModel.toJSON(), {
+        lat: 1, lng: 5
+    });
+});
+
+test("Dot notation remaps", function(t) {
+    t.plan(1);
+
+    var mockTopic = createMock();
+    var myModel = new TestingModel().bind(mockTopic, {
         bindings: {
             a: "x",
             b: "y"
@@ -82,13 +116,13 @@ test("Model with remaps and chosen keys", function(t) {
     t.deepEqual(myModel.toJSON(), {
         x: 1, y: 2
     });
-
-    t.end();
 });
 
 test("Header to timestamp transform", function(t) {
+    t.plan(1);
+
     var mockTopic = createMock();
-    var myModel = new BBROS.Model().bind(mockTopic, {
+    var myModel = new TestingModel().bind(mockTopic, {
         bindings: {
             a: "a"
         },
@@ -110,13 +144,13 @@ test("Header to timestamp transform", function(t) {
         a: 1,
         timestamp: 2e12 + 400
     });
-
-    t.end();
 });
 
 test("transform", function(t) {
+    t.plan(2);
+
     var mockTopic = createMock();
-    var myModel = new BBROS.Model().bind(mockTopic, {
+    var myModel = new TestingModel().bind(mockTopic, {
         transform: function(message) {
             message.x = "foo";
             return message.a === 1 ? message : null;
@@ -138,6 +172,23 @@ test("transform", function(t) {
     t.deepEqual(myModel.toJSON(), {
         a: 1, b: 2, x: "foo"
     });
-
-    t.end();
 });
+
+test("saving a simple model", function(t) {
+    t.plan(1);
+
+    var mockTopic = createMock();
+    var myModel = new TestingModel({c: 3}).bind(mockTopic);
+
+    mockTopic.subscribe(function(message) {
+        t.deepEqual(message, {
+            a: 1, b: 2, c: 3
+        });
+    });
+
+    myModel.save({
+        a: 1, b: 2
+    });
+});
+
+// Needs more tests here
