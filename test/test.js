@@ -118,7 +118,7 @@ test("Dot notation remaps", function(t) {
     });
 });
 
-test("Header to timestamp transform", function(t) {
+test("Header to timestamp transform (defaults)", function(t) {
     t.plan(1);
 
     var mockTopic = createMock();
@@ -143,6 +143,34 @@ test("Header to timestamp transform", function(t) {
     t.deepEqual(myModel.toJSON(), {
         a: 1,
         timestamp: 2e12 + 400
+    });
+});
+
+test("Header to timestamp transform (non defaults)", function(t) {
+    t.plan(1);
+
+    var mockTopic = createMock();
+    var myModel = new TestingModel().bind(mockTopic, {
+        bindings: {
+            a: "a"
+        },
+        headerTimestamp: ["t", "h"]
+    });
+
+    mockTopic.publish({
+        h: {
+            seq: 11,
+            stamp: {
+                secs: 2e9,
+                nsecs: 4e8
+            }
+        },
+        a: 1, b: 2, c: 3
+    });
+
+    t.deepEqual(myModel.toJSON(), {
+        a: 1,
+        t: 2e12 + 400
     });
 });
 

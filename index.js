@@ -36,9 +36,11 @@ function createBinder(method) {
         var bindingsLength = bindings.length;
 
         var headerTimestamp = _.result(options, "headerTimestamp");
-        if (headerTimestamp && headerTimestamp.length < 2) {
-            headerTimestamp.push("header");
+        if (headerTimestamp) {
+            // Apply a default if not specified
+            _.defaults(headerTimestamp, ["timestamp", "header"]);
         }
+
 
         topic.subscribe(function(_message) {
             var message;
@@ -67,9 +69,11 @@ function createBinder(method) {
                 self[method](message);
             }
         });
-        this._topic = topic;
-        this._topicOptions = options;
-        return this;
+
+        return _.extend(this, {
+            _topic: topic,
+            _topicOptions: options
+        });
     };
 }
 
@@ -79,7 +83,7 @@ var Model = Backbone.Model.extend({
     // If you pick keys or make this model a topic sink
     // then your on your own
     sync: function(method, model, options) {
-        if (method != "update") {
+        if (!_.contains(["update", "create", "patch"], method)) {
             throw new TypeError("Method " + method + " isn't implemented");
         }
         options = _.extend({}, options, this._topicOptions);
@@ -95,7 +99,10 @@ var Model = Backbone.Model.extend({
         if (json) {
             this._topic.publish(json);
         }
-        return this;
+        return new Promise(function(resolve) {
+            options.success && options.success.call(this, model);
+            resolve(json);
+        });
     }
 });
 
@@ -105,5 +112,6 @@ var Collection = Backbone.Collection.extend({
 
 module.exports = {
     Model: Model,
+    ParamModel: require("./ParamModel"),
     Collection: Collection
 };

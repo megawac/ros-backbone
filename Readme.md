@@ -1,5 +1,28 @@
 Simple Backbone model and collection bindings to a ROS Topic
 
+# Parameter model
+
+Simple `fetch`, `update`, `delete` bindings for `Model` -> `Param`
+
+```js
+var rosbb = require("ros-backbone");
+
+var ParamModel = rosbb.ParamModel.extend({
+    ros: new ROS.Ros({
+        url: "ws://localhost:9091"
+    }),
+    params: ["/foo", "/bar"]
+});
+
+var paramModel = new ParamModel();
+
+paramModel.fetch().then(() => {
+   app.doSomething(); 
+});
+```
+
+# Topic Model/Collection
+
 ```js
 var rosbb = require("ros-backbone");
 
