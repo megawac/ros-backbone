@@ -1,5 +1,8 @@
+"use strict";
+
 var BBROS = require("../index");
 var TopicMock = require("./TopicMock");
+var _ = require("underscore");
 
 var test = require("prova");
 
@@ -219,4 +222,58 @@ test("saving a simple model", function(t) {
     });
 });
 
-// Needs more tests here
+test("publish transform", function(t) {
+    t.plan(1);
+
+    var mockTopic = createMock();
+    var myModel = new TestingModel({c: 3}).bind(mockTopic, {
+        publishTransform: function(message) {
+            return _.pick(message, "a", "c");
+        }
+    });
+
+    mockTopic.subscribe(function(message) {
+        t.deepEqual(message, {
+            a: 1, c: 3
+        });
+    });
+
+    myModel.save({
+        a: 1, b: 2
+    });
+});
+
+test("inverts picks and js timestamps -> header", function(t) {
+    t.plan(1);
+
+    var mockTopic = createMock();
+    var myModel = new TestingModel().bind(mockTopic, {
+        bindings: {
+            a: "x"
+        },
+        headerTimestamp: ["t", "h"],
+        frame_id: "frame"
+    });
+
+    mockTopic.subscribe(function(message) {
+        delete message.h.seq;
+        t.deepEqual(message, {
+            h: {
+                stamp: {
+                    secs: 2e9,
+                    nsecs: 4e8
+                },
+                frame_id: "frame"
+            },
+            a: 1, b: 2, c: 3
+        });
+    });
+
+    myModel.set("x", 1);
+    myModel.save({
+        b: 2,
+        c: 3
+    }, {
+        timestamp: 2e12 + 400
+    });
+});

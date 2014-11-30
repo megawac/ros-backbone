@@ -83,7 +83,8 @@ var Model = Backbone.Model.extend({
     // If you pick keys or make this model a topic sink
     // then your on your own
     sync: function(method, model, options) {
-        if (!_.contains(["update", "create", "patch"], method)) {
+        // Will nearly always be "create"
+        if (!_.contains(["create", "update", "patch"], method)) {
             throw new TypeError("Method " + method + " isn't implemented");
         }
         options = _.extend({}, options, this._topicOptions);
@@ -97,10 +98,14 @@ var Model = Backbone.Model.extend({
             json = options.publishTransform.call(model, json, options);
         }
         if (json) {
+            _.each(options.bindings, function(key, topicKey) {
+                json[topicKey] = json[key];
+                delete json[key];
+            });
             this._topic.publish(json);
         }
         return new Promise(function(resolve) {
-            options.success && options.success.call(this, model);
+            options.success.call(this, model);
             resolve(json);
         });
     }
