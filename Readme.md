@@ -1,4 +1,5 @@
-Simple Backbone model and collection bindings to a ROS Topic
+Backbone bindings to a ROSLib  [![Build Status](https://travis-ci.org/megawac/ros-backbone.svg?branch=master)](https://travis-ci.org/megawac/ros-backbone)
+========
 
 # Parameter model
 
