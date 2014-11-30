@@ -1,7 +1,7 @@
 "use strict";
 
 var test = require("prova");
-global.Promise = require("es6-promise").Promise;
+global.Promise = require("native-promise-only");
 
 var ParamMock = require("./RosParamMock");
 var ParamModel = require("../ParamModel");

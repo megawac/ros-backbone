@@ -13,9 +13,9 @@
   "author": "megawac (https://github.com/megawac)",
   "license": "wtfpl",
   "devDependencies": {
-    "es6-promise": "^2.0.0",
     "eventemitter2": "^0.4.14",
     "jshint": "^2.5.10",
+    "native-promise-only": "*",
     "prova": "^2.0.3"
   },
   "dependencies": {
