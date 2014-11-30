@@ -14,36 +14,36 @@ var ParamModel = Backbone.Model.extend({
     params: [/* node/param1, node2/param */],
     /* ros: new ROS.Ros({url: "ws://localhost:9091"}) */
     sync: function(method, model, options) {
-        var self = this, $promise;
+        var $promise;
         switch (method) {
             case "read": 
-                $promise = Promise.all(_.map(self.params, function(name) {
+                $promise = Promise.all(_.map(model.params, function(name) {
                     return new Promise(function(resolve) {
-                        return makeParam(self.ros, name).get(function(val){
+                        return makeParam(model.ros, name).get(function(val){
                             resolve([name, val]);
                         });
                     });
                 })).then(function(paramPairs) {
-                    return self.set(_.object(paramPairs)).attributes;
+                    return model.set(_.object(paramPairs)).attributes;
                 });
                 break;
             case "delete":
                 $promise = new Promise(function(resolve) {
-                    _.each(self.attributes, function(val, param) {
-                        makeParam(self.ros, param).delete();
+                    _.each(model.attributes, function(val, param) {
+                        makeParam(model.ros, param).delete();
                     });
-                    resolve(self.toJSON());
+                    resolve(model.toJSON());
                 });
                 break;
             default:
                 $promise = new Promise(function(resolve) {
-                    _.each(self.params, function(param) {
-                        var val = self.attributes[param];
-                        var param = makeParam(self.ros, param);
+                    _.each(model.params, function(name) {
+                        var val = model.attributes[name];
+                        var param = makeParam(model.ros, name);
                         if (val == void 0) param.delete();
                         else param.set(val);
                     });
-                    resolve(self.toJSON());
+                    resolve(model.toJSON());
                 });
         }
         $promise.then(options.success, options.error);
