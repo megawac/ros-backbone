@@ -1,6 +1,6 @@
 {
   "name": "ros-backbone",
-  "version": "1.2.0-a2",
+  "version": "1.2.0-a3",
   "description": "Backbone Model and Collection bindings to ROSLib.js Topics and Services",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "dependencies": {
     "backbone": "^1.0.0",
     "underscore": "^1.5.0",
-    "underscore-contrib": "git+https://github.com/documentcloud/underscore-contrib#edf72d6bed76b01364a3c52b7eb034ffad0ebd2b"
+    "underscore-contrib": "documentcloud/underscore-contrib#edf72d6bed76b01364a3c52b7eb034ffad0ebd2b"
   },
   "peerDependencies": {
     "roslib": ">= 0.9.1"

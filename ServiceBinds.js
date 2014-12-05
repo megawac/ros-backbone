@@ -8,7 +8,7 @@ function createSyncer(method, parent, options) {
     var $promise = new Promise(function(resolve, error) {
         var args = {};
 
-        if (method !== "fetch") {
+        if (method !== "read") {
             _.extend(args, {
                 value: this.toJSON()
             });
