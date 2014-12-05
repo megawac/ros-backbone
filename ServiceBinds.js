@@ -4,13 +4,13 @@ var Backbone = require("backbone");
 var _ = require("underscore");
 
 
-function createSyncer(method, parent, options) {
+function createSyncer(method, model, options) {
     var $promise = new Promise(function(resolve, error) {
         var args = {};
 
         if (method !== "read") {
             _.extend(args, {
-                value: this.toJSON()
+                value: model.toJSON()
             });
         }
 
