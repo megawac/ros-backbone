@@ -14,7 +14,7 @@ function createSyncer(method, model, options) {
             });
         }
 
-        this.service.callService(args, resolve, error);
+        model.service.callService(args, resolve, error);
     });
     $promise.then(options.success, options.error);
     return $promise;
