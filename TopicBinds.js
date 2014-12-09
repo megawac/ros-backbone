@@ -41,8 +41,7 @@ function createBinder(method) {
             _.defaults(headerTimestamp, ["timestamp", "header"]);
         }
 
-
-        topic.subscribe(function(_message) {
+        function listener(_message) {
             var message;
             if (bindingsLength) {
                 message = {};
@@ -68,7 +67,15 @@ function createBinder(method) {
             if (message) {
                 self[method](message);
             }
-        });
+        }
+
+        // TFClient
+        if (bindings.frame_id != null) {
+            topic.subscribe(bindings.frame_id, listener);
+        } else {
+            // Topic or ActionClient
+            topic.subscribe(listener);
+        }
 
         return _.extend(this, {
             _topic: topic,
