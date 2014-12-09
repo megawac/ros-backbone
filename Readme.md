@@ -68,7 +68,11 @@ myModel.bind(myTopic, {
 
     publishTransform: function(message) {
         // return falsey to omit, otherwise transform? & return the message to publish
-    }
+    },
+
+    // If you want to use a TFClient and provide a TFClient instance to bind
+    frame_id: "odom_frame"
+
 });
 
 // publish a ROS message
