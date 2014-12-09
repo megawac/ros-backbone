@@ -18,7 +18,7 @@ var ParamModel = rosbb.ParamModel.extend({
 var paramModel = new ParamModel();
 
 paramModel.fetch().then(() => {
-   app.doSomething(); 
+   app.doSomething();
 });
 ```
 
@@ -70,8 +70,10 @@ myModel.bind(myTopic, {
         // return falsey to omit, otherwise transform? & return the message to publish
     },
 
+   frame_id: "my_frame", // frame to set when emitting messages
+
     // If you want to use a TFClient and provide a TFClient instance to bind
-    frame_id: "odom_frame"
+    observeFrame: "odom_frame"
 
 });
 

@@ -69,9 +69,9 @@ function createBinder(method) {
             }
         }
 
-        // TFClient
-        if (bindings.frame_id != null) {
-            topic.subscribe(bindings.frame_id, listener);
+        // TFClient (note _.has throws for null in <1.7)
+        if (_.result(options, "observeFrame") != null) {
+            topic.subscribe(options.observeFrame, listener);
         } else {
             // Topic or ActionClient
             topic.subscribe(listener);
@@ -86,7 +86,7 @@ function createBinder(method) {
 
 var Model = Backbone.Model.extend({
     bind: createBinder("set"),
-    
+
     // If you pick keys or make this model a topic sink
     // then your on your own
     sync: function(method, model, options) {
