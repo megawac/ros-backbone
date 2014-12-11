@@ -112,8 +112,8 @@ var Model = Backbone.Model.extend({
             this._topic.publish(json);
         }
         return new Promise(function(resolve) {
-            options.success.call(this, model);
-            resolve(json);
+            options.success.call(model, model.attributes);
+            resolve(model.attributes);
         });
     }
 });

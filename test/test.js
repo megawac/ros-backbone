@@ -223,7 +223,7 @@ test("saving a simple model", function(t) {
 });
 
 test("publish transform", function(t) {
-    t.plan(1);
+    t.plan(2);
 
     var mockTopic = createMock();
     var myModel = new TestingModel({c: 3}).bind(mockTopic, {
@@ -240,6 +240,11 @@ test("publish transform", function(t) {
 
     myModel.save({
         a: 1, b: 2
+    })
+    .then(function(attributes) {
+        t.deepEqual(attributes, {
+            a: 1, b: 2, c: 3
+        });
     });
 });
 
