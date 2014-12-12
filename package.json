@@ -1,6 +1,6 @@
 {
   "name": "ros-backbone",
-  "version": "1.2.0-a8",
+  "version": "1.2.0-a9",
   "description": "Backbone Model and Collection bindings to ROSLib.js Topics and Services",
   "main": "index.js",
   "scripts": {

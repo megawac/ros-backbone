@@ -18,8 +18,21 @@ function readParams(model) {
             });
         });
     })).then(function(paramPairs) {
-        return model.set(_.object(paramPairs)).attributes;
+        model.set(_.object(paramPairs));
+
+        model.set(model.reduce(function(memo, val, key) {
+            // Strip prefix
+            memo[unprefix(key)] = val;
+            return memo;
+        }, {}));
+
+        return model.attributes;
     });
+}
+
+function unprefix(key) {
+    var idx = key.lastIndexOf("/");
+    return idx >= 0 ? key.slice(idx + 1) : key;
 }
 
 function deleteParams(model) {
