@@ -84,6 +84,13 @@ function createBinder(method) {
     };
 }
 
+function destroy() {
+    return new Promise(function(resolve) {
+        _.result(this._topic, "unsubscribe");
+        resolve();
+    });
+}
+
 var Model = Backbone.Model.extend({
     bind: createBinder("set"),
 
@@ -115,11 +122,13 @@ var Model = Backbone.Model.extend({
             options.success.call(model, model.attributes);
             resolve(model.attributes);
         });
-    }
+    },
+    destroy: destroy
 });
 
 var Collection = Backbone.Collection.extend({
-    bind: createBinder("add")
+    bind: createBinder("add"),
+    destroy: destroy
 });
 
 module.exports = {
