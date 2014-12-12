@@ -87,6 +87,7 @@ function createBinder(method) {
 function destroy() {
     return new Promise(function(resolve) {
         _.result(this._topic, "unsubscribe");
+        _.result(this._topic, "unadvertise");
         resolve();
     });
 }
