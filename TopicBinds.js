@@ -2,7 +2,8 @@
 
 // var Topic = require("roslib/src/core/Topic");
 var Backbone = require("backbone");
-var _ = require("underscore-contrib");
+var _ = require("lodash");
+var stringToPath = require('lodash/_stringToPath');
 
 // Convert a header to a timestamp in ms
 function headerToTimestamp(header) {
@@ -31,7 +32,7 @@ function createBinder(method) {
 
         // Precompute the tuple (pathToObj, val)
         var bindings = _.map(_.result(options, "bindings"), function(val, key) {
-            return [_.keysFromPath(key), val];
+            return [stringToPath(key), val];
         });
         var bindingsLength = bindings.length;
 
@@ -48,7 +49,7 @@ function createBinder(method) {
                 for (var i = 0; i < bindingsLength; i++) {
                     var binding = bindings[i];
                     var path = binding[0];
-                    message[binding[1]] = path.length > 1 ? _.getPath(_message, path) : _message[path];
+                    message[binding[1]] = path.length > 1 ? _.get(_message, path) : _message[path];
                 }
             } else {
                 message = _message;
@@ -100,7 +101,7 @@ var Model = Backbone.Model.extend({
     // then your on your own
     sync: function(method, model, options) {
         // Will nearly always be "create"
-        if (!_.contains(["create", "update", "patch"], method)) {
+        if (!_.includes(["create", "update", "patch"], method)) {
             throw new TypeError("Method " + method + " isn't implemented");
         }
         options = _.extend({}, options, this._topicOptions);

@@ -2,7 +2,7 @@
 
 var BBROS = require("../index");
 var TopicMock = require("./TopicMock");
-var _ = require("underscore");
+var _ = require("lodash");
 
 var test = require("prova");
 

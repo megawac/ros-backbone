@@ -19,8 +19,7 @@
   },
   "dependencies": {
     "backbone": "^1.0.0",
-    "underscore": "^1.5.0",
-    "underscore-contrib": "documentcloud/underscore-contrib#edf72d6bed76b01364a3c52b7eb034ffad0ebd2b"
+    "lodash": "^4.17.4"
   },
   "peerDependencies": {
     "roslib": ">= 0.9.1"

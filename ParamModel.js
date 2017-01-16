@@ -1,7 +1,7 @@
 "use strict";
 
 var Backbone = require("backbone");
-var _ = require("underscore");
+var _ = require('lodash');
 
 function makeParam(ros, param) {
     return ros.Param({
@@ -18,7 +18,7 @@ function readParams(model) {
             });
         });
     })).then(function(paramPairs) {
-        return model.set(_.object(paramPairs)).attributes;
+        return model.set(_.fromPairs(paramPairs)).attributes;
     });
 }
 
