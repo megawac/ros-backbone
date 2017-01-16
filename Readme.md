@@ -22,13 +22,6 @@ paramModel.fetch().then(() => {
 });
 ```
 
-**Note**: this part of the module requires ES6 promises, if you want to support Node (0.10) or [some browsers](caniuse.com/promises) [use a polyfill](https://github.com/getify/native-promise-only/blob/master/lib/npo.src.js)
-
-```js
-// Browserify
-global.Promise = require("native-promise-only");
-// Node
-GLOBAL.Promise = require("native-promise-only");
 ```
 
 # Topic Model/Collection

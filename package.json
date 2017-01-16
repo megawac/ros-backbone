@@ -15,8 +15,7 @@
   "devDependencies": {
     "eventemitter2": "^0.4.14",
     "jshint": "^2.5.10",
-    "native-promise-only": "*",
-    "prova": "^2.0.3"
+    "prova": "azer/prova#8aede78e2209527e34f83152210a2e0e3ba6752d"
   },
   "dependencies": {
     "backbone": "^1.0.0",
